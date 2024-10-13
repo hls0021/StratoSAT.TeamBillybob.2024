@@ -1,3 +1,8 @@
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BNO055.h>
+#include <Adafruit_BMP3XX.h>
+
 // BNO055 sensor object
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
 // GPS object 
@@ -8,11 +13,25 @@ unsigned long currentTime;
 int totalPackets = 1; 
 const char* teamID = "BillyBob"; //Subject to change
 void setup() {
+  
+  Serial.begin(115200);
+
+  while (!Serial) delay(10);  // wait for serial port to open!
+  
+  if (!bno.begin())
+  {
+    Serial.print("No BNO055 detected");
+    while (1);
+  }
+
+  delay(1000);
+
 	//serial communication
 	Serial.begin(9600);
 	Serial1.begin(9600);
 //GPS
 }
+
 
 
 void loop() {
