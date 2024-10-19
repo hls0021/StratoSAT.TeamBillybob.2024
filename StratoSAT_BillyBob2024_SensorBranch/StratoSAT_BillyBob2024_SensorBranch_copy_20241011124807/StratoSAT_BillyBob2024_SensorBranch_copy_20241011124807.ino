@@ -69,3 +69,24 @@ int = bno.getTemp()
 ?????????
  
 }
+
+//log data
+dataFile = SD.open("datalog.txt", FILE_WRITE);
+        if (dataFile) {
+           // Output Euler angles (Orientation)
+            dataFile.print("Orientation (Euler angles): ");
+            // Output Gyroscope data
+            dataFile.print("Angular Velocity (Gyro): ");
+            // Output Acceleration
+            dataFile.print("Acceleration: ");
+            // Output Temperature
+            dataFile.print("Temperature: ");
+            // Output GPS data
+            dataFile.print("GPS Location: ");
+            // Output Time spent
+            dataFile.print("Time spent since start: ");
+            dataFile.print("UTC Time: ");
+            } else {
+            Serial.println("Error opening datalog.txt");
+        }
+
