@@ -1,9 +1,39 @@
+#include <wire.h>
+#include <Adafruit_BNO055.h>
+
+//state definition
+enum State {
+  LAUNCH_READY,
+  ASCEND,
+  STABILIZATION,
+  DESCENT,
+  LANDING,
+  END
+};
+
 void setup() {
-  // put your setup code here, to run once:
 
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  //state transition
+  switch (currentState) {
+    case LAUNCH_READY:
+    launchReady();
 
+    case ASCEND:
+    ascend();
+
+    case STABILIZATION:
+    stabilization();
+
+    case DESCENT:
+    descent();
+
+    case LANDING:
+    landing();
+
+    case END:
+    end;
+  }
 }
