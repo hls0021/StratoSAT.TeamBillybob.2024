@@ -2,6 +2,8 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 #include <Adafruit_BMP3XX.h>
+#include <SparkFun_u-Blox_NEO_M9N>
+#include <SAMD21_Dev_Breakout>
 
 // BNO055 sensor object
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
