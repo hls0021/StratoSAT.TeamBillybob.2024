@@ -18,8 +18,8 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   //Integral and Derivative terms 
-  integral = integral + error * 50;
-  derivative = (error - lasterror) / 50;
+  integral = integral + error * (50 - (millis() - startTime));
+  derivative = (error - lasterror) / (50 - (millis() - startTime));
   if ()
   error = lasterror;
 
