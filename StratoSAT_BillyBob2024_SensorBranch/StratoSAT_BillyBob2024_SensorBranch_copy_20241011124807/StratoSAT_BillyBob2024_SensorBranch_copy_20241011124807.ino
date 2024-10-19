@@ -11,6 +11,8 @@
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
 // GPS object 
 SFE_UBLOX_GNSS GPS;
+// BMP388 sensor object
+Adafruit_BMP3xx bmp = Adafruit_BMP388(88);
 // Declare global variables and constants 
 unsigned long startTime; 
 unsigned long currentTime; 
@@ -28,6 +30,10 @@ void setup() {
     while (1);
   }
 
+  bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
+  bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
+  bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
+  bmp.setOutputDataRate(BMP3_ODR_50_HZ);
   delay(1000);
 
 //GPS
