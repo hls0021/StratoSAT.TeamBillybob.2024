@@ -37,3 +37,17 @@ void loop() {
     end;
   }
 }
+
+//launch ready state
+void launchready(){
+  if (altitude > 1.0) {
+    currentState = ASCEND;
+  }
+}
+
+//ascend state
+void ascend(){
+  if (altitde > 16.0){
+  currentState = STABILIZATION;
+  }
+}
