@@ -2,6 +2,9 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 #include <Adafruit_BMP3XX.h>
+#include <utility/imumaths.h>
+#include <SPI.h>
+#include <SD.h>
 
 // BNO055 sensor object
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
