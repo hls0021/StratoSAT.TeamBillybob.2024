@@ -12,6 +12,12 @@ void setup() {
 	Serial.begin(9600);
 	Serial1.begin(9600);
 //GPS
+// Initialize SD card
+    if (!SD.begin(chipSelect)) {
+        Serial.println("SD card initialization failed!");
+        while (1);
+    }
+    Serial.println("SD card initialized.");
 }
 
 

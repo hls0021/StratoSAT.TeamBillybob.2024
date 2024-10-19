@@ -30,6 +30,22 @@ void setup() {
 	Serial.begin(9600);
 	Serial1.begin(9600);
 //GPS
+
+// Initialize SD card
+    if (!SD.begin(chipSelect)) {
+        Serial.println("SD card initialization failed!");
+        while (1);
+    }
+    Serial.println("SD card initialized.");
+
+// Open file to write data
+    dataFile = SD.open("datalog.txt", FILE_WRITE);
+    if (dataFile) {
+        dataFile.println("Payload Data Logging Started");
+        dataFile.println("Team ID: " + String(teamID));
+        dataFile.close();
+    }
+
 }
 
 
