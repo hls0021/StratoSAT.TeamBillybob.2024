@@ -12,7 +12,7 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55);
 // GPS object 
 SFE_UBLOX_GNSS GPS;
 // BMP388 sensor object
-Adafruit_BMP3xx bmp = Adafruit_BMP388(88);
+Adafruit_BMP3XX bmp = Adafruit_BMP3XX(88);
 // Declare global variables and constants 
 unsigned long startTime; 
 unsigned long currentTime; 
@@ -74,16 +74,16 @@ void loop() {
 
   // Collect and output GPS data 
         if (GPS.getLatitude() != 0 && GPS.getLongitude() != 0) {
-            Serial1.print("GPS Location: ");
-            Serial1.print(GPS.getLatitude() / 10000000.0, 6);  // Latitude
-            Serial1.print(", ");
-            Serial1.print(GPS.getLongitude() / 10000000.0, 6);  // Longitude
-            Serial1.println();
+            Serial5.print("GPS Location: ");
+            Serial5.print(GPS.getLatitude() / 10000000.0, 6);  // Latitude
+            Serial5.print(", ");
+            Serial5.print(GPS.getLongitude() / 10000000.0, 6);  // Longitude
+            Serial5.println();
         }
 
         if (GPS.getAltitude() != 0) {
-            Serial1.print("Altitude: ");
-            Serial1.print(GPS.getAltitude() / 1000.0);  // Altitude in meters
+            Serial5.print("Altitude: ");
+            Serial5.print(GPS.getAltitude() / 1000.0);  // Altitude in meters
             Serial1.println(" m");
         }
        
