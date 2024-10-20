@@ -12,7 +12,7 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55);
 // GPS object 
 SFE_UBLOX_GNSS GPS;
 // BMP388 sensor object
-Adafruit_BMP3XX bmp = Adafruit_BMP3XX(88);
+Adafruit_BMP3XX bmp;
 // Declare global variables and constants 
 unsigned long startTime; 
 unsigned long currentTime; 
@@ -29,7 +29,10 @@ void setup() {
     Serial5.print("No BNO055 detected");
     while (1);
   }
-
+  if (!bmp.begin_I2C()) {  
+    Serial5.println("BMP388 initialization failed!");
+    while (1);  
+  }
   bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
   bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
   bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
@@ -70,26 +73,34 @@ void loop() {
         Serial5.print(accel.y()); Serial5.print(", ");
         Serial5.print(accel.z()); Serial5.println(" m/s^2");
 
-  //collect and output temperature
-  int temp = bno.getTemp();
-
+  //collect and output temperature 
+  if (!bmp.performReading()) {
+        Serial5.println("Failed to perform BMP388 reading");
+        return;
+        }
+        Serial5.print("BMP388 Temperature: ");
+        Serial5.print(bmp.temperature);
+        Serial5.println(" C");
+        Serial5.print("BMP388 Altitude: ");
+        Serial5.print(bmp.readAltitude(633));  // Adjust sea level pressure need to fix
+        Serial5.println(" m");
   // Collect and output GPS data 
-        if (GPS.getLatitude() != 0 && GPS.getLongitude() != 0) {
-            Serial5.print("GPS Location: ");
-            Serial5.print(GPS.getLatitude() / 10000000.0, 6);  // Latitude
-            Serial5.print(", ");
-            Serial5.print(GPS.getLongitude() / 10000000.0, 6);  // Longitude
-            Serial5.println();
+  if (GPS.getLatitude() != 0 && GPS.getLongitude() != 0) {
+        Serial5.print("GPS Location: ");
+        Serial5.print(GPS.getLatitude() / 10000000.0, 6);  // Latitude
+        Serial5.print(", ");
+        Serial5.print(GPS.getLongitude() / 10000000.0, 6);  // Longitude
+        Serial5.println();
         }
 
-        if (GPS.getAltitude() != 0) {
-            Serial5.print("Altitude: ");
-            Serial5.print(GPS.getAltitude() / 1000.0);  // Altitude in meters
-            Serial5.println(" m");
+  if (GPS.getAltitude() != 0) {
+        Serial5.print("Altitude: ");
+        Serial5.print(GPS.getAltitude() / 1000.0);  // Altitude in meters
+        Serial5.println(" m");
 
         }
        
-  // Gather and output time spent and UTC time
+   // Gather and output time spent and UTC time
         currentTime = millis();
         unsigned long timeSpent = currentTime - starting
   if(millis() - startTime < 50) {
