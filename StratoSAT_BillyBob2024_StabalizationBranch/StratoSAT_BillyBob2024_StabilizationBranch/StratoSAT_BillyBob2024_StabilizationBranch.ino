@@ -3,9 +3,7 @@
   float Ki;
   float Kd;
   float integral;
-  float maxintegral
   float derivative;
-  float integrallimit;
   float reference;
   lasterror = 0;
   lastrefference = reference;
@@ -18,18 +16,28 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  // Proportionalterm
+  // Proportional term
   blank
   error = reference - blank
   //Integral and Derivative terms 
   integral = integral + error * (50 - (millis() - startTime));
-  if(integral > maxintegral) {
-    integral = 
-  }
   derivative = (error - lasterror) / (50 - (millis() - startTime));
+  //Output
   output = (Kp * error) + (Ki * integral) + (Kd * derivative);
-  if ()
+  
   lasterror = error;
 
+  //The following is psuedocode, we need electrical to tell us where the solenoid mosfets are connected because we can't read schemetics
 
+  if(output >= setvalue) {
+    both open solenoids
+  }
+  else {
+    if(output >= setvalue) {
+      alternate solenoids rapidly
+    }
+    else {
+      both closed solenoids
+    }
+  }  
 }
