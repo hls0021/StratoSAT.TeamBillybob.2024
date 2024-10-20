@@ -47,7 +47,7 @@ void setup() {
         while (1);  // If GNSS doesn't initialize, stop the program
     }
     //Start Time
-      startingTime = millis();
+      startTime = millis();
 }
 
 
@@ -101,8 +101,6 @@ void loop() {
         }
        
    // Gather and output time spent and UTC time
-        currentTime = millis();
-        unsigned long timeSpent = currentTime - starting
   if(millis() - startTime < 50) {
     delay(50 - (millis() - startTime));
   }
