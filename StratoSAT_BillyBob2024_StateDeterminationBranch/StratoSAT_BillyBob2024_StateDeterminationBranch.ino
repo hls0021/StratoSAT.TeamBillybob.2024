@@ -61,9 +61,11 @@ void stabilization() {
 void descent() {
   if (pressure <= upper & presure >= lower) {
     if (velocity = 0) {
-      waitingTime = startTime - endTime
-      endTime = 
-      if (waitingTime >=)
+      waitingTime = waitingTime + startTime - endTime;
+      endTime = startTime - preTime;
+      if (waitingTime >= 420000) {
+        currentState = LANDING;
+      }
     }
   }
 }
