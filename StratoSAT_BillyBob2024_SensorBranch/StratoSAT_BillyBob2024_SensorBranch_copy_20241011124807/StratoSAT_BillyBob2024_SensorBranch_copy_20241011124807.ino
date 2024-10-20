@@ -72,15 +72,29 @@ void loop() {
   //collect and output temperature
   int temp = bno.getTemp();
 
-  // gather and output GPS data
+  // Collect and output GPS data 
+        if (GPS.getLatitude() != 0 && GPS.getLongitude() != 0) {
+            Serial1.print("GPS Location: ");
+            Serial1.print(GPS.getLatitude() / 10000000.0, 6);  // Latitude
+            Serial1.print(", ");
+            Serial1.print(GPS.getLongitude() / 10000000.0, 6);  // Longitude
+            Serial1.println();
+        }
+
+        if (GPS.getAltitude() != 0) {
+            Serial1.print("Altitude: ");
+            Serial1.print(GPS.getAltitude() / 1000.0);  // Altitude in meters
+            Serial1.println(" m");
+        }
+       
 
   //Record Time 
           // Gather and output time spent and UTC time
         currentTime = millis();
         unsigned long timeSpent = currentTime - startTime;
-        Serial.print("Time spent since start: ");
-        Serial.print(timeSpent / 1000);  // in seconds
-        Serial.println(" seconds");
+        Serial1.print("Time spent since start: ");
+        Serial1.print(timeSpent / 1000);  // in seconds
+        Serial1.println(" seconds");
  
   if(millis() - startTime < 50) {
     delay(50 - (millis() - startTime));
