@@ -39,15 +39,32 @@ void loop() {
 }
 
 //launch ready state
-void launchready(){
+void launchready() {
   if (altitude > 1.0) {
     currentState = ASCEND;
   }
 }
 
 //ascend state
-void ascend(){
-  if (altitde > 16.0){
+void ascend() {
+  if (altitude > 16.0) {
   currentState = STABILIZATION;
   }
 }
+
+//stabilization state
+void stabilization() {
+
+}
+
+//descent stae
+void descent() {
+  if (altitude > 192.0) {
+    if ()
+  }
+}
+
+void landing() {
+  break
+}
+
