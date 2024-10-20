@@ -85,11 +85,8 @@ void loop() {
         if (GPS.getAltitude() != 0) {
             Serial5.print("Altitude: ");
             Serial5.print(GPS.getAltitude() / 1000.0);  // Altitude in meters
-<<<<<<< HEAD
             Serial5.println(" m");
-=======
-            Serial1.println(" m");
->>>>>>> 3d617a845edb5f43d62e0f91d1388b1ea4bb50c3
+
         }
        
   // Gather and output time spent and UTC time
