@@ -101,6 +101,20 @@ void loop() {
         }
        
    // Gather and output time spent and UTC time
+       Serial.println();
+    Serial.print(GPS.getYear());
+    Serial.print("-");
+    Serial.print(GPS.getMonth());
+    Serial.print("-");
+    Serial.print(GPS.getDay());
+    Serial.print(" ");
+    Serial.print(GPS.getHour());
+    Serial.print(":");
+    Serial.print(GPS.getMinute());
+    Serial.print(":");
+    Serial.print(GPS.getSecond());
+
+
   if(millis() - startTime < 50) {
     delay(50 - (millis() - startTime));
   }
