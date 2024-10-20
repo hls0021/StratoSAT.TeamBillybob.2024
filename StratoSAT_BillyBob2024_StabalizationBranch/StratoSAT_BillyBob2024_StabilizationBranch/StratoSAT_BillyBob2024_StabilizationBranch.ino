@@ -28,13 +28,14 @@ void loop() {
   lasterror = error;
 
   //The following is psuedocode, we need electrical to tell us where the solenoid mosfets are connected because we can't read schemetics
+  //Pins 14 and 15 (A0 and A1) are connected to the solenoids
 
   if(output >= setvalue) {
     both open solenoids
   }
   else {
     if(output >= setvalue) {
-      alternate solenoids rapidly
+      alternate solenoids
     }
     else {
       both closed solenoids
