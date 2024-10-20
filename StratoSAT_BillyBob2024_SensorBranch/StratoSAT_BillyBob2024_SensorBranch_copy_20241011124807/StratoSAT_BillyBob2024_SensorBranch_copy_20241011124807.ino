@@ -87,9 +87,7 @@ void loop() {
             Serial1.println(" m");
         }
        
-
-  //Record Time 
-          // Gather and output time spent and UTC time
+  // Gather and output time spent and UTC time
         currentTime = millis();
         unsigned long timeSpent = currentTime - startTime;
         Serial1.print("Time spent since start: ");
