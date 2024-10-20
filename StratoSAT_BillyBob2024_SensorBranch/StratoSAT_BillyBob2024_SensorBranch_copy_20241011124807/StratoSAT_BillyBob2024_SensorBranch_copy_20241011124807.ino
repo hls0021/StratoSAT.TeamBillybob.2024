@@ -12,7 +12,7 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55);
 // GPS object 
 SFE_UBLOX_GNSS GPS;
 // BMP388 sensor object
-Adafruit_BMP3xx bmp = Adafruit_BMP388(88);
+Adafruit_BMP3XX bmp = Adafruit_BMP3XX(88);
 // Declare global variables and constants 
 unsigned long startTime; 
 unsigned long currentTime; 
@@ -85,7 +85,11 @@ void loop() {
         if (GPS.getAltitude() != 0) {
             Serial5.print("Altitude: ");
             Serial5.print(GPS.getAltitude() / 1000.0);  // Altitude in meters
+<<<<<<< HEAD
             Serial5.println(" m");
+=======
+            Serial1.println(" m");
+>>>>>>> 3d617a845edb5f43d62e0f91d1388b1ea4bb50c3
         }
        
   // Gather and output time spent and UTC time
