@@ -59,8 +59,12 @@ void stabilization() {
 
 //descent stae
 void descent() {
-  if (altitude > 192.0) {
-    if ()
+  if (pressure <= upper & presure >= lower) {
+    if (velocity = 0) {
+      waitingTime = startTime - endTime
+      endTime = 
+      if (waitingTime >=)
+    }
   }
 }
 
