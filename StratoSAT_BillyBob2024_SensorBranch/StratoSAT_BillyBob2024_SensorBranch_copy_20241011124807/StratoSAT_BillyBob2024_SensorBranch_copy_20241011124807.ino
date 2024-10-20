@@ -36,28 +36,51 @@ void setup() {
   bmp.setOutputDataRate(BMP3_ODR_50_HZ);
   delay(1000);
 
-//GPS
-
-
+    //GPS
+    if (GPS.begin()) {
+        Serial.println("u-blox GNSS module initialized successfully!");
+    } else {
+        Serial.println("u-blox GNSS module initialization failed!");
+        while (1);  // If GNSS doesn't initialize, stop the program
+    }
+    //Start Time
+      startTime = millis();
 }
 
 
 
 void loop() {
-  startTime = millis();
   //collect and output absolute orientation by euler angle
   imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
-
+        Serial1.print("Orientation (Euler angles): ");
+        Serial1.print("Heading: "); Serial1.print(euler.x());
+        Serial1.print(" Roll: "); Serial1.print(euler.y());
+        Serial1.print(" Pitch: "); Serial1.println(euler.z());
   //collect and output angular velocity with the gyro
   imu::Vector<3> gyro = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
-
+        Serial1.print("Angular Velocity (Gyro): ");
+        Serial1.print(gyro.x()); Serial1.print(", ");
+        Serial1.print(gyro.y()); Serial1.print(", ");
+        Serial1.print(gyro.z()); Serial1.println(" rad/s");
   // Collect and output acceleration
   imu::Vector<3> accel = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
+        Serial1.print("Acceleration: ");
+        Serial1.print(accel.x()); Serial1.print(", ");
+        Serial1.print(accel.y()); Serial1.print(", ");
+        Serial1.print(accel.z()); Serial1.println(" m/s^2");
 
   //collect and output temperature
   int temp = bno.getTemp();
 
   // gather and output GPS data
+
+  //Record Time 
+          // Gather and output time spent and UTC time
+        currentTime = millis();
+        unsigned long timeSpent = currentTime - startTime;
+        Serial.print("Time spent since start: ");
+        Serial.print(timeSpent / 1000);  // in seconds
+        Serial.println(" seconds");
  
   if(millis() - startTime < 50) {
     delay(50 - (millis() - startTime));
