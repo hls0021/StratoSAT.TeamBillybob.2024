@@ -12,7 +12,7 @@ enum State {
 };
 
 void setup() {
-
+preTime = 900000;
 }
 
 void loop() {
