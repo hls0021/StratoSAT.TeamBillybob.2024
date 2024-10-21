@@ -1,6 +1,9 @@
 #include <wire.h>
 #include <Adafruit_BNO055.h>
 
+//led
+int led = 16
+
 //state definition
 enum State {
   LAUNCH_READY,
@@ -11,7 +14,9 @@ enum State {
 };
 
 void setup() {
-preTime = 900000;
+  preTime = 900000;
+  Serial.begin(9600); 
+  pinMode(led, OUTPUT);
 }
 
 void loop() {
@@ -31,6 +36,7 @@ void loop() {
 
     case LANDING:
     landing();
+    
   }
 }
 
