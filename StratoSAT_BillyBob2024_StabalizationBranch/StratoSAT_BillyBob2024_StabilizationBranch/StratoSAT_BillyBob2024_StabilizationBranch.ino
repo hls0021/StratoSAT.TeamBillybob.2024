@@ -17,7 +17,8 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   // Proportional term
-  error = reference - bno.;
+  orienation = bno.getVector(Adafruit_BNO055::VECTOR_EULER); 
+  error = reference - orientation;
   //Integral and Derivative terms 
   integral = integral + error * (50 - (millis() - startTime));
   derivative = (error - lasterror) / (50 - (millis() - startTime));
