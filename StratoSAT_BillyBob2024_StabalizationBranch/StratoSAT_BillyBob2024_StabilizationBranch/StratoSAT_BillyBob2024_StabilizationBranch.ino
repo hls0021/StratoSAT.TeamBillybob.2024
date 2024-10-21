@@ -5,20 +5,19 @@
   float integral;
   float derivative;
   float reference;
-  lasterror = 0;
-  lastrefference = reference;
 
 
 void setup() {
   // put your setup code here, to run once:
+  lasterror = 0;
+  lastrefference = reference;
 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   // Proportional term
-  blank
-  error = reference - blank
+  error = reference - bno.;
   //Integral and Derivative terms 
   integral = integral + error * (50 - (millis() - startTime));
   derivative = (error - lasterror) / (50 - (millis() - startTime));
