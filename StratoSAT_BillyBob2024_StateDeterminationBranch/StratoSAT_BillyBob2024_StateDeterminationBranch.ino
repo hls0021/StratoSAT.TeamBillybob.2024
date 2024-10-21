@@ -7,8 +7,7 @@ enum State {
   ASCEND,
   STABILIZATION,
   DESCENT,
-  LANDING,
-  END
+  LANDING
 };
 
 void setup() {
@@ -32,9 +31,6 @@ void loop() {
 
     case LANDING:
     landing();
-
-    case END:
-    end;
   }
 }
 
@@ -48,13 +44,15 @@ void launchready() {
 //ascend state
 void ascend() {
   if (altitude > 16.0) {
-  currentState = STABILIZATION;
+    currentState = STABILIZATION;
   }
 }
 
 //stabilization state
 void stabilization() {
-
+  if (threshold > value) {
+    currentState = DESCENT;
+  }
 }
 
 //descent stae
