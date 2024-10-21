@@ -79,8 +79,8 @@ void loop() {
         return;
         }
         Serial5.print("BMP388 Temperature: ");
-        Serial5.print(bmp.temperature);
-        Serial5.println(" C");
+        Serial5.print(bmp.readTemperature());
+        Serial5.println(" °C");
         Serial5.print("BMP388 Altitude: ");
         Serial5.print(bmp.readAltitude(633));  // Adjust sea level pressure need to fix
         Serial5.println(" m");
