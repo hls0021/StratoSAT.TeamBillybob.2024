@@ -14,6 +14,7 @@ enum State {
 };
 
 void setup() {
+  tenloops = 0;
   preTime = 900000;
   Serial.begin(9600); 
   pinMode(led, OUTPUT);
@@ -22,6 +23,19 @@ void setup() {
 void loop() {
   //state transition
   switch (currentState) {
+
+    tenloops = tenloops + 1;
+    if (tenloops >= 10 & digitalWrite(led, LOW)) {
+      digitalWrite(led, HIGH);
+      tenloops = tenloops - 10;
+    }
+    else {
+      if(tenloops >= & digitalWrite(led, HIGH)) {
+        digitalWrite(led, LOW);
+        tenloops = tenloops - 10;
+      }
+    }
+
     case LAUNCH_READY:
     launchReady();
 
@@ -36,7 +50,7 @@ void loop() {
 
     case LANDING:
     landing();
-    
+
   }
 }
 
