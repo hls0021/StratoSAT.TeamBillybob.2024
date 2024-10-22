@@ -8,6 +8,7 @@ float preTime;
 float endTime;
 float altitude;
 float gyro;
+float ledonoff = 0;
 
 
 //led
@@ -31,14 +32,16 @@ void loop() {
   //state transition
   tenloops = tenloops + 1;
   if (tenloops >= 10) {
-    if(digitalWrite(led, LOW)) {
+    if(ledonoff = 0) {
     digitalWrite(led, HIGH);
     tenloops = tenloops - 10;
+    ledonoff = 1;
     }
   else {
-    if(digitalWrite(led, HIGH)) {
+    if(ledonoff = 0) {
       digitalWrite(led, LOW);
       tenloops = tenloops - 10;
+      ledonoff = 0;
       }
     }
   }
