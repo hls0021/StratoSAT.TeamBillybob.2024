@@ -26,6 +26,7 @@ void loop() {
   bno.getevent(&event);
   angularvelocity = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
   orienation = bno.getVector(Adafruit_BNO055::VECTOR_EULER); 
+  steady = orientation.x();
   if(angularvelocity >= 10) {
     digitalWrite(solenoidclock, HIGH);
     digitalWrite(solenoidcounter, LOW);
