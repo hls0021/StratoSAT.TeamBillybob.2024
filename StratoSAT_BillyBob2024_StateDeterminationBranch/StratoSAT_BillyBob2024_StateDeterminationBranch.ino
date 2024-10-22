@@ -1,11 +1,20 @@
-#include <wire.h>
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
+#include <SparkFun_u-blox_GNSS_Arduino_Library.h>
+
+float tenloops;
+float preTime;
+float endTime;
+float altitude;
+float gyro;
+
 
 //led
-int led = 16
+int led = 16;
 
 //state definition
-enum State {
+enum currentState {
   LAUNCH_READY,
   ASCEND,
   STABILIZATION,
@@ -14,27 +23,26 @@ enum State {
 };
 
 void setup() {
-  tenloops = 0;
-  preTime = 900000;
   Serial.begin(9600); 
   pinMode(led, OUTPUT);
 }
 
 void loop() {
   //state transition
-  switch (currentState) {
-
-    tenloops = tenloops + 1;
-    if (tenloops >= 10 & digitalWrite(led, LOW)) {
-      digitalWrite(led, HIGH);
-      tenloops = tenloops - 10;
+  tenloops = tenloops + 1;
+  if (tenloops >= 10) {
+    if(digitalWrite(led, LOW)) {
+    digitalWrite(led, HIGH);
+    tenloops = tenloops - 10;
     }
-    else {
-      if(tenloops >= & digitalWrite(led, HIGH)) {
-        digitalWrite(led, LOW);
-        tenloops = tenloops - 10;
+  else {
+    if(digitalWrite(led, HIGH)) {
+      digitalWrite(led, LOW);
+      tenloops = tenloops - 10;
       }
     }
+  }
+  switch (currentState) {
 
     case LAUNCH_READY:
     launchReady();
@@ -56,29 +64,30 @@ void loop() {
 
 //launch ready state
 void launchready() {
-  if (altitude > 1.0) {
+  if (altitude > 100000) {
     currentState = ASCEND;
   }
 }
 
 //ascend state
 void ascend() {
-  if (altitude > 16.0) {
+  if (altitude > 1600000 {
     currentState = STABILIZATION;
   }
 }
 
 //stabilization state
 void stabilization() {
-  if (threshold > value) {
+  if (altitude > 2700000) {
+    if(acceleration < 0)
     currentState = DESCENT;
   }
 }
 
 //descent stae
 void descent() {
-  if (pressure <= upper & presure >= lower) {
-    if (velocity = 0) {
+  if (altitude <= 400000) {
+    if (gyro = 0) {
       waitingTime = waitingTime + startTime - endTime;
       endTime = startTime - preTime;
       if (waitingTime >= 420000) {
