@@ -6,10 +6,14 @@
   float derivative;
   float reference;
   float lasterror = 0;
-
+  float error;
   sensor_event_t event;
   int solenoidclock = 14;
   int solenoidcounter = 15;
+  float output;
+  float angularvelocity;
+  float orientation;
+  float steady = orientation.x();
 
 void setup() {
   // put your setup code here, to run once:
@@ -30,7 +34,7 @@ void loop() {
     digitalWrite(solenoidclock, LOW);
     digitalWrite(solenoidcounter, HIGH);
   }
-  error = reference - orientation;
+  error = reference - steady;
   //Integral and Derivative terms 
   integral = integral + error * (50 - (millis() - startTime));
   derivative = (error - lasterror) / (50 - (millis() - startTime));
