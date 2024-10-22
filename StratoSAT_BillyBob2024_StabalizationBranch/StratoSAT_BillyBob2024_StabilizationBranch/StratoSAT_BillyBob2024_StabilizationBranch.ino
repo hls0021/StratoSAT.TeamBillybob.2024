@@ -20,7 +20,16 @@ void loop() {
   // put your main code here, to run repeatedly:
   // Proportional term
   bno.getevent(&event);
+  angularvelocity = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
   orienation = bno.getVector(Adafruit_BNO055::VECTOR_EULER); 
+  if(angularvelocity >= 10) {
+    digitalWrite(solenoidclock, HIGH);
+    digitalWrite(solenoidcounter, LOW);
+  }
+  if(angularvelocity <= -10) {
+    digitalWrite(solenoidclock, LOW);
+    digitalWrite(solenoidcounter, HIGH);
+  }
   error = reference - orientation;
   //Integral and Derivative terms 
   integral = integral + error * (50 - (millis() - startTime));
@@ -30,16 +39,16 @@ void loop() {
   
   lasterror = error;
 
-  if(output >= setvalue) {
+  if(output >= 15) {
     digitalWrite(solenoidclock, HIGH);
-    digitalWrite(solenoidcounter, LOW);
+    digitalWrite(solenoidcounter, HIGH);
   }
-  if(output <= setvalue) {
+  if(output <= -15) {
     digitalWrite(solenoidclock, LOW);
     digitalWrite(solenoidcounter, HIGH);
   }  
-  if(output >= negativezero) {
-    if(output <= positivezero) {
+  if(output >= 2) {
+    if(output <= 2) {
       digitalWrite(solenoidclock, LOW);
       digitalWrite(solenoidcounter, LOW);
     }
