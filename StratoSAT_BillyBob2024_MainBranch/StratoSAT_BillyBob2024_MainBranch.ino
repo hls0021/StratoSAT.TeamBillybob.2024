@@ -33,7 +33,7 @@ float derivative;
 float reference;
 float lasterror = 0;
 float error;
-sensor_event_t event;
+sensors_event_t event;
 int solenoidclock = 14;
 int solenoidcounter = 15;
 float output;
@@ -57,7 +57,7 @@ FlightState currentState = LAUNCH_READY;
 
 void setup() {
   
-  Serial.begin(9600);
+  Serial5.begin(9600);
   Serial5.println("Serial connected!");
   Serial5.begin(9600);
   while (!Serial5) delay(10);  // wait for serial port to open!
@@ -98,11 +98,6 @@ void setup() {
 
 void loop() {
   startTime = millis();
-  //Proportional term
-  bno.getevent(&event);
-  angularvelocity = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
-  orienation = bno.getVector(Adafruit_BNO055::VECTOR_EULER); 
-  steady = orientation.x();
 
   //collect and output absolute orientation by euler angle
   imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
@@ -163,6 +158,13 @@ void loop() {
     Serial5.print(GPS.getMinute());
     Serial5.print(":");
     Serial5.print(GPS.getSecond());
+
+  //Proportional term
+  bno.getEvent(&event);
+  angularvelocity = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
+  orienation = bno.getVector(Adafruit_BNO055::VECTOR_EULER); 
+  steady = orientation.x();
+
 
   if(angularvelocity >= 10) {
     digitalWrite(solenoidclock, HIGH);
