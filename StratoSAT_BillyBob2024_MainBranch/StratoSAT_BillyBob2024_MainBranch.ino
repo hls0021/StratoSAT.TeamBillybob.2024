@@ -7,6 +7,8 @@
 #include <utility/imumaths.h>
 #include <string.h>
 
+//Sensors
+
 // BNO055 sensor object
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
 // GPS object 
@@ -119,3 +121,65 @@ void loop() {
     delay(50 - (millis() - startTime));
   }
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Stabalization
+
+float Kp;
+  float Ki;
+  float Kd;
+  float integral;
+  float derivative;
+  float reference;
+  float lasterror = 0;
+  float error;
+  sensor_event_t event;
+  int solenoidclock = 14;
+  int solenoidcounter = 15;
+  float output;
+  float angularvelocity;
+  float orientation;
+  float steady = orientation.x();
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  // Proportional term
+  bno.getevent(&event);
+  angularvelocity = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
+  orienation = bno.getVector(Adafruit_BNO055::VECTOR_EULER); 
+  steady = orientation.x();
+  if(angularvelocity >= 10) {
+    digitalWrite(solenoidclock, HIGH);
+    digitalWrite(solenoidcounter, LOW);
+  }
+  if(angularvelocity <= -10) {
+    digitalWrite(solenoidclock, LOW);
+    digitalWrite(solenoidcounter, HIGH);
+  }
+  error = reference - steady;
+  //Integral and Derivative terms 
+  integral = integral + error * (50 - (millis() - startTime));
+  derivative = (error - lasterror) / (50 - (millis() - startTime));
+  //Output
+  output = (Kp * error) + (Ki * integral) + (Kd * derivative);
+  
+  lasterror = error;
+
+  if(output >= 15) {
+    digitalWrite(solenoidclock, HIGH);
+    digitalWrite(solenoidcounter, HIGH);
+  }
+  if(output <= -15) {
+    digitalWrite(solenoidclock, LOW);
+    digitalWrite(solenoidcounter, HIGH);
+  }  
+  if(output >= 2) {
+    if(output <= 2) {
+      digitalWrite(solenoidclock, LOW);
+      digitalWrite(solenoidcounter, LOW);
+    }
+  }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
