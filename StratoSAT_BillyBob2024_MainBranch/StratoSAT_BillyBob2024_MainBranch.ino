@@ -21,21 +21,21 @@ String teamID = "BillyBob";
 void setup() {
   
   Serial.begin(9600);
-  Serial.println("Serial connected!");
+  Serial5.println("Serial connected!");
   Serial5.begin(9600);
   while (!Serial5) delay(10);  // wait for serial port to open!
   
   while (!bno.begin())
   {
-    Serial.print("No BNO055 detected");
+    Serial5.print("No BNO055 detected");
     delay(1000);
   }
-  Serial.println("BNO Success");
+  Serial5.println("BNO Success");
   while (!bmp.begin_I2C()) {  
-    Serial.println("BMP388 initialization failed!");
+    Serial5.println("BMP388 initialization failed!");
     delay(1000);  
   }
-  Serial.println("BMP Success");
+  Serial5.println("BMP Success");
   bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
   bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
   bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
@@ -44,9 +44,9 @@ void setup() {
 
     //GPS
     if (GPS.begin()) {
-        Serial.println("u-blox GNSS module initialized successfully!");
+        Serial5.println("u-blox GNSS module initialized successfully!");
     } else {
-        Serial.println("u-blox GNSS module initialization failed!");
+        Serial5.println("u-blox GNSS module initialization failed!");
         while (1);  // If GNSS doesn't initialize, stop the program
     }
     //Start Time
@@ -59,63 +59,63 @@ void loop() {
     startTime = millis();
   //collect and output absolute orientation by euler angle
   imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
-        Serial.print("Orientation (Euler angles): ");
-        Serial.print("Heading: "); Serial.print(euler.x());
-        Serial.print(" Roll: "); Serial.print(euler.y());
-        Serial.print(" Pitch: "); Serial.println(euler.z());
+        Serial5.print("Orientation (Euler angles): ");
+        Serial5.print("Heading: "); Serial5.print(euler.x());
+        Serial5.print(" Roll: "); Serial5.print(euler.y());
+        Serial5.print(" Pitch: "); Serial5.println(euler.z());
   //collect and output angular velocity with the gyro
   imu::Vector<3> gyro = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
-        Serial.print("Angular Velocity (Gyro): ");
-        Serial.print(gyro.x()); Serial.print(", ");
-        Serial.print(gyro.y()); Serial.print(", ");
-        Serial.print(gyro.z()); Serial.println(" rad/s");
+        Serial5.print("Angular Velocity (Gyro): ");
+        Serial5.print(gyro.x()); Serial5.print(", ");
+        Serial5.print(gyro.y()); Serial5.print(", ");
+        Serial5.print(gyro.z()); Serial5.println(" rad/s");
   // Collect and output acceleration
   imu::Vector<3> accel = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
-        Serial.print("Acceleration: ");
-        Serial.print(accel.x()); Serial.print(", ");
-        Serial.print(accel.y()); Serial.print(", ");
-        Serial.print(accel.z()); Serial.println(" m/s^2");
+        Serial5.print("Acceleration: ");
+        Serial5.print(accel.x()); Serial5.print(", ");
+        Serial5.print(accel.y()); Serial5.print(", ");
+        Serial5.print(accel.z()); Serial5.println(" m/s^2");
 
   //collect and output temperature 
   if (!bmp.performReading()) {
-        Serial.println("Failed to perform BMP388 reading");
+        Serial5.println("Failed to perform BMP388 reading");
         return;
         }
-        Serial.print("BMP388 Temperature: ");
-        Serial.print(bmp.readTemperature());
-        Serial.println(" °C");
-        Serial.print("BMP388 Altitude: ");
-        Serial.print(bmp.readAltitude(630));  // Adjust sea level pressure need to fix
-        Serial.println(" m");
+        Serial5.print("BMP388 Temperature: ");
+        Serial5.print(bmp.readTemperature());
+        Serial5.println(" °C");
+        Serial5.print("BMP388 Altitude: ");
+        Serial5.print(bmp.readAltitude(630));  // Adjust sea level pressure need to fix
+        Serial5.println(" m");
   // Collect and output GPS data 
   if (GPS.getLatitude() != 0 && GPS.getLongitude() != 0) {
-        Serial.print("GPS Location: ");
-        Serial.print(GPS.getLatitude() / 10000000.0, 6);  // Latitude
-        Serial.print(", ");
-        Serial.print(GPS.getLongitude() / 10000000.0, 6);  // Longitude
-        Serial.println();
+        Serial5.print("GPS Location: ");
+        Serial5.print(GPS.getLatitude() / 10000000.0, 6);  // Latitude
+        Serial5.print(", ");
+        Serial5.print(GPS.getLongitude() / 10000000.0, 6);  // Longitude
+        Serial5.println();
         }
 
   if (GPS.getAltitude() != 0) {
-        Serial.print("Altitude: ");
-        Serial.print(GPS.getAltitude() / 1000.0);  // Altitude in meters
-        Serial.println(" m");
+        Serial5.print("Altitude: ");
+        Serial5.print(GPS.getAltitude() / 1000.0);  // Altitude in meters
+        Serial5.println(" m");
 
         }
        
    // Gather and output time spent and UTC time
-       Serial.println();
-    Serial.print(GPS.getYear());
-    Serial.print("-");
-    Serial.print(GPS.getMonth());
-    Serial.print("-");
-    Serial.print(GPS.getDay());
-    Serial.print(" ");
-    Serial.print(GPS.getHour());
-    Serial.print(":");
-    Serial.print(GPS.getMinute());
-    Serial.print(":");
-    Serial.print(GPS.getSecond());
+       Serial5.println();
+    Serial5.print(GPS.getYear());
+    Serial5.print("-");
+    Serial5.print(GPS.getMonth());
+    Serial5.print("-");
+    Serial5.print(GPS.getDay());
+    Serial5.print(" ");
+    Serial5.print(GPS.getHour());
+    Serial5.print(":");
+    Serial5.print(GPS.getMinute());
+    Serial5.print(":");
+    Serial5.print(GPS.getSecond());
 
 
   if(millis() - startTime < 50) {
