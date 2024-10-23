@@ -20,8 +20,8 @@ int totalPackets = 1;
 String teamID = "BillyBob";
 void setup() {
   
-  Serial.begin(115200);
-  Serial5.begin(115200);
+  Serial.begin(9600);
+  Serial5.begin(9600);
   while (!Serial5) delay(10);  // wait for serial port to open!
   
   if (!bno.begin())
