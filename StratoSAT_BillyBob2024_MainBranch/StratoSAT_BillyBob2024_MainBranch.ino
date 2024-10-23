@@ -22,7 +22,48 @@ String teamID = "BillyBob";
 float tenloops;
 float preTime;
 float endTime;
+float waitingTime;
 float altitude;
+float previous1altitude;
+float previous2altitude;
+float previous3altitude;
+float previous4altitude;
+float previous5altitude;
+float previous6altitude;
+float previous7altitude;
+float previous8altitude;
+float previous9altitude;
+float previous10altitude;
+float previous11altitude;
+float previous12altitude;
+float previous13altitude;
+float previous14altitude;
+float previous15altitude;
+float previous16altitude;
+float previous17altitude;
+float previous18altitude;
+float previous19altitude;
+float previous20altitude;
+float previous21altitude;
+float previous22altitude;
+float previous23altitude;
+float previous24altitude;
+float previous25altitude;
+float previous26altitude;
+float previous27altitude;
+float previous28altitude;
+float previous29altitude;
+float previous30altitude;
+float previous30altitude;
+float previous31altitude;
+float previous32altitude;
+float previous33altitude;
+float previous34altitude;
+float previous35altitude;
+float previous36altitude;
+float previous37altitude;
+float previous39altitude;
+float previous40altitude;
 float gyro;
 float ledonoff = 0;
 float Kp;
@@ -37,8 +78,9 @@ sensors_event_t event;
 int solenoidclock = 14;
 int solenoidcounter = 15;
 float output;
-float angularvelocity;
-float orientation;
+imu::Vector<3> angularvelocity;
+imu::Vector<3> orientation;
+imu::Vector<3> acceleration;
 float steady;
 //TODO angularVelocity and orientation need to be type vector
 // imu::Vector<3> orientation;
@@ -56,6 +98,44 @@ enum FlightState {
   LANDING
 };
 FlightState currentState = LAUNCH_READY;
+
+//launch ready state
+void launchReady() {
+  if (altitude > 100000) {
+    currentState = ASCEND;
+  }
+}
+
+//ascend state
+void ascend() {
+  if (altitude > 1600000) {
+    currentState = STABILIZATION;
+  }
+}
+
+//stabilization state
+void stabilization() {
+  if (altitude > 2700000) {
+    if(acceleration.x() < 0) {}
+      currentState = DESCENT;
+    }
+ }
+}
+
+//descent stae
+void descent() {
+  if (altitude <= previous40altitude + 15000) {
+    waitingTime = waitingTime + startTime - endTime;
+    endTime = startTime - preTime;
+    if (waitingTime >= 420000) {
+        currentState = LANDING;
+    }
+  }
+}
+
+void landing() {
+  while(1);
+}
 
 void setup() {
   
@@ -91,9 +171,25 @@ void setup() {
   //Start Time
   startTime = millis();
 
-  Serial.begin(9600); 
+  Serial5.begin(9600); 
   pinMode(led, OUTPUT);
-
+  Serial5.print("Team_ID,");
+  Serial5.print("Mission Time,");
+  Serial5.print("Packet Count,");
+  Serial5.print("Software State,");
+  Serial5.print("Accleration,");
+  Serial5.print("Eular X,");
+  Serial5.print("Eular Y,");
+  Serial5.print("Eular Z,");
+  Serial5.print("Gyro X,");
+  Serial5.print("Gyro Y,");
+  Serial5.print("Gyro Z,");
+  Serial5.print("GPS LONG,");
+  Serial5.print("GPS LAT,");
+  Serial5.print("GPS ALT,");
+  Serial5.print("Pressure ALT,");
+  Serial5.print("Temperature,");
+  Serial5.println("UTC Time");
 }
 
 
@@ -159,24 +255,22 @@ void loop() {
     Serial5.print(":");
     Serial5.print(GPS.getMinute());
     Serial5.print(":");
-    Serial5.print(GPS.getSecond());
+    Serial5.println(GPS.getSecond());
 
   //Proportional term
   bno.getEvent(&event);
   angularvelocity = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
-  orienation = bno.getVector(Adafruit_BNO055::VECTOR_EULER); 
-  steady = orientation.x();
 
 
-  if(angularvelocity >= 10) {
+  if(angularvelocity.x >= 10) {
     digitalWrite(solenoidclock, HIGH);
     digitalWrite(solenoidcounter, LOW);
   }
-  if(angularvelocity <= -10) {
+  if(angularvelocity.x <= -10) {
     digitalWrite(solenoidclock, LOW);
     digitalWrite(solenoidcounter, HIGH);
   }
-  error = reference - steady;
+  error = reference - orentation.x;
   //Integral and Derivative terms 
   integral = integral + error * (50 - (millis() - startTime));
   derivative = (error - lasterror) / (50 - (millis() - startTime));
@@ -219,7 +313,7 @@ void loop() {
   }
   
   switch (currentState) {
-//launchReady(), ascend(), stabilization(), descent(), and landing() are functions that are declared after 
+  //launchReady(), ascend(), stabilization(), descent(), and landing() are functions that are declared after 
     case LAUNCH_READY:
       launchReady();
       break;
@@ -235,46 +329,51 @@ void loop() {
     case LANDING:
       landing();
       break;
-    if(millis() - startTime < 50) {
+  
+  if(millis() - startTime < 50) {
     delay(50 - (millis() - startTime));
-  }
-}
 
-//launch ready state
-void launchReady() {
-  if (altitude > 100000) {
-    currentState = ASCEND;
-  }
-}
-
-//ascend state
-void ascend() {
-  if (altitude > 1600000) {
-    currentState = STABILIZATION;
-  }
-}
-
-//stabilization state
-void stabilization() {
-  if (altitude > 2700000) {
-    if(acceleration < 0)
-    currentState = DESCENT;
-  }
-}
-
-//descent stae
-void descent() {
-  if (altitude <= 400000) {
-    if (gyro = 0) {
-      waitingTime = waitingTime + startTime - endTime;
-      endTime = startTime - preTime;
-      if (waitingTime >= 420000) {
-        currentState = LANDING;
-      }
+    //determine height from 40 runs ago
+    previous40altitude = previous39altitude
+    previous39altitude = previous38altitude
+    previous38altitude = previous37altitude
+    previous37altitude = previous36altitude
+    previous36altitude = previous35altitude
+    previous35altitude = previous34altitude
+    previous34altitude = previous33altitude
+    previous33altitude = previous32altitude
+    previous32altitude = previous31altitude
+    previous31altitude = previous30altitude
+    previous30altitude = previous29altitude
+    previous29altitude = previous28altitude
+    previous28altitude = previous27altitude
+    previous27altitude = previous26altitude
+    previous26altitude = previous25altitude
+    previous25altitude = previous24altitude
+    previous24altitude = previous23altitude
+    previous23altitude = previous22altitude
+    previous22altitude = previous21altitude
+    previous21altitude = previous20altitude
+    previous20altitude = previous19altitude
+    previous19altitude = previous18altitude
+    previous18altitude = previous17altitude
+    previous17altitude = previous16altitude
+    previous16altitude = previous15altitude
+    previous15altitude = previous14altitude
+    previous14altitude = previous13altitude
+    previous13altitude = previous12altitude
+    previous12altitude = previous11altitude
+    previous11altitude = previous10altitude
+    previous10altitude = previous9altitude
+    previous9altitude = previous8altitude
+    previous8altitude = previous7altitude
+    previous7altitude = previous6altitude
+    previous6altitude = previous5altitude
+    previous5altitude = previous4altitude
+    previous4altitude = previous3altitude
+    previous3altitude = previous2altitude
+    previous2altitude = previous1altitude
+    previous1altitude = altitude
     }
   }
-}
-
-void landing() {
-  break;
 }
