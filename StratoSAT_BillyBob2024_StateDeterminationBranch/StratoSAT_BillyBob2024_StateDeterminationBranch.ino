@@ -15,13 +15,14 @@ float ledonoff = 0;
 int led = 16;
 
 //state definition
-enum currentState {
+enum FlightState {
   LAUNCH_READY,
   ASCEND,
   STABILIZATION,
   DESCENT,
   LANDING
 };
+FlightState currentState = LAUNCH_READY;
 
 void setup() {
   Serial.begin(9600); 
@@ -49,24 +50,25 @@ void loop() {
 
     case LAUNCH_READY:
     launchReady();
+    break;
 
     case ASCEND:
     ascend();
-
+    break;
     case STABILIZATION:
     stabilization();
-
+    break;
     case DESCENT:
     descent();
-
+    break;
     case LANDING:
     landing();
-
+    break;
   }
 }
 
 //launch ready state
-void launchready() {
+void launchReady() {
   if (altitude > 100000) {
     currentState = ASCEND;
   }
@@ -74,7 +76,7 @@ void launchready() {
 
 //ascend state
 void ascend() {
-  if (altitude > 1600000 {
+  if (altitude > 1600000) {
     currentState = STABILIZATION;
   }
 }
@@ -101,6 +103,6 @@ void descent() {
 }
 
 void landing() {
-  break
+  break;
 }
 
