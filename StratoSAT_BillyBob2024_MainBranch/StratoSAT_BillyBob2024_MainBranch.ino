@@ -39,7 +39,9 @@ int solenoidcounter = 15;
 float output;
 float angularvelocity;
 float orientation;
-float steady = orientation.x();
+float steady;
+//TODO angularVelocity and orientation need to be type vector
+// imu::Vector<3> orientation;
 
 
 //led
@@ -202,13 +204,13 @@ void loop() {
     //state transition
   tenloops = tenloops + 1;
   if (tenloops >= 10) {
-    if(ledonoff = 0) {
+    if(ledonoff == 0) {
     digitalWrite(led, HIGH);
     tenloops = tenloops - 10;
     ledonoff = 1;
     }
     else {
-    if(ledonoff = 0) {
+    if(ledonoff == 0) {
       digitalWrite(led, LOW);
       tenloops = tenloops - 10;
       ledonoff = 0;
@@ -217,24 +219,22 @@ void loop() {
   }
   
   switch (currentState) {
-
+//launchReady(), ascend(), stabilization(), descent(), and landing() are functions that are declared after 
     case LAUNCH_READY:
-    launchReady();
-    break;
-
+      launchReady();
+      break;
     case ASCEND:
-    ascend();
-    break;
+      ascend();
+      break;
     case STABILIZATION:
-    stabilization();
-    break;
+      stabilization();
+      break;
     case DESCENT:
-    descent();
-    break;
+      descent();
+      break;
     case LANDING:
-    landing();
-    break;
-
+      landing();
+      break;
     if(millis() - startTime < 50) {
     delay(50 - (millis() - startTime));
   }
