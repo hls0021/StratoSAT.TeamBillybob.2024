@@ -25,6 +25,22 @@ float endTime;
 float altitude;
 float gyro;
 float ledonoff = 0;
+float Kp;
+float Ki;
+float Kd;
+float integral;
+float derivative;
+float reference;
+float lasterror = 0;
+float error;
+sensor_event_t event;
+int solenoidclock = 14;
+int solenoidcounter = 15;
+float output;
+float angularvelocity;
+float orientation;
+float steady = orientation.x();
+
 
 //led
 int led = 16;
@@ -81,7 +97,13 @@ void setup() {
 
 
 void loop() {
-    startTime = millis();
+  startTime = millis();
+  //Proportional term
+  bno.getevent(&event);
+  angularvelocity = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
+  orienation = bno.getVector(Adafruit_BNO055::VECTOR_EULER); 
+  steady = orientation.x();
+
   //collect and output absolute orientation by euler angle
   imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
         Serial5.print("Orientation (Euler angles): ");
@@ -142,9 +164,37 @@ void loop() {
     Serial5.print(":");
     Serial5.print(GPS.getSecond());
 
+  if(angularvelocity >= 10) {
+    digitalWrite(solenoidclock, HIGH);
+    digitalWrite(solenoidcounter, LOW);
+  }
+  if(angularvelocity <= -10) {
+    digitalWrite(solenoidclock, LOW);
+    digitalWrite(solenoidcounter, HIGH);
+  }
+  error = reference - steady;
+  //Integral and Derivative terms 
+  integral = integral + error * (50 - (millis() - startTime));
+  derivative = (error - lasterror) / (50 - (millis() - startTime));
+  //Output
+  output = (Kp * error) + (Ki * integral) + (Kd * derivative);
+  
+  lasterror = error;
 
-  if(millis() - startTime < 50) {
-    delay(50 - (millis() - startTime));
+  if(output >= 15) {
+    digitalWrite(solenoidclock, HIGH);
+    digitalWrite(solenoidcounter, HIGH);
+  }
+  if(output <= -15) {
+    digitalWrite(solenoidclock, LOW);
+    digitalWrite(solenoidcounter, HIGH);
+  }  
+  if(output >= 2) {
+    if(output <= 2) {
+      digitalWrite(solenoidclock, LOW);
+      digitalWrite(solenoidcounter, LOW);
+    }
+  }
 
 
     //state transition
@@ -182,6 +232,9 @@ void loop() {
     case LANDING:
     landing();
     break;
+
+    if(millis() - startTime < 50) {
+    delay(50 - (millis() - startTime));
   }
 }
 
