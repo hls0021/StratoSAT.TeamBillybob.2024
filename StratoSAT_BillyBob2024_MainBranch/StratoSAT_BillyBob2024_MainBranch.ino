@@ -283,15 +283,15 @@ void loop() {
   angularvelocity = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
 
 
-  if(angularvelocity.x >= 10) {
+  if(angularvelocity.x() >= 10) {
     digitalWrite(solenoidclock, HIGH);
     digitalWrite(solenoidcounter, LOW);
   }
-  if(angularvelocity.x <= -10) {
+  if(angularvelocity.x() <= -10) {
     digitalWrite(solenoidclock, LOW);
     digitalWrite(solenoidcounter, HIGH);
   }
-  error = reference - orientation.x;
+  error = reference - orientation.x();
   //Integral and Derivative terms 
   integral = integral + error * (50 - (millis() - startTime));
   derivative = (error - lasterror) / (50 - (millis() - startTime));
