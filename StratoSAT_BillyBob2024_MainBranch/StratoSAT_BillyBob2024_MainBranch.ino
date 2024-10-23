@@ -18,6 +18,27 @@ unsigned long startTime;
 unsigned long currentTime; 
 int totalPackets = 1; 
 String teamID = "BillyBob";
+
+float tenloops;
+float preTime;
+float endTime;
+float altitude;
+float gyro;
+float ledonoff = 0;
+
+//led
+int led = 16;
+
+//state definition
+enum FlightState {
+  LAUNCH_READY,
+  ASCEND,
+  STABILIZATION,
+  DESCENT,
+  LANDING
+};
+FlightState currentState = LAUNCH_READY;
+
 void setup() {
   
   Serial.begin(9600);
@@ -49,8 +70,12 @@ void setup() {
         Serial5.println("u-blox GNSS module initialization failed!");
         while (1);  // If GNSS doesn't initialize, stop the program
     }
-    //Start Time
-      startTime = millis();
+  //Start Time
+  startTime = millis();
+
+  Serial.begin(9600); 
+  pinMode(led, OUTPUT);
+
 }
 
 
@@ -120,5 +145,81 @@ void loop() {
 
   if(millis() - startTime < 50) {
     delay(50 - (millis() - startTime));
+
+
+    //state transition
+  tenloops = tenloops + 1;
+  if (tenloops >= 10) {
+    if(ledonoff = 0) {
+    digitalWrite(led, HIGH);
+    tenloops = tenloops - 10;
+    ledonoff = 1;
+    }
+    else {
+    if(ledonoff = 0) {
+      digitalWrite(led, LOW);
+      tenloops = tenloops - 10;
+      ledonoff = 0;
+      }
+    }
   }
+  
+  switch (currentState) {
+
+    case LAUNCH_READY:
+    launchReady();
+    break;
+
+    case ASCEND:
+    ascend();
+    break;
+    case STABILIZATION:
+    stabilization();
+    break;
+    case DESCENT:
+    descent();
+    break;
+    case LANDING:
+    landing();
+    break;
+  }
+}
+
+//launch ready state
+void launchReady() {
+  if (altitude > 100000) {
+    currentState = ASCEND;
+  }
+}
+
+//ascend state
+void ascend() {
+  if (altitude > 1600000) {
+    currentState = STABILIZATION;
+  }
+}
+
+//stabilization state
+void stabilization() {
+  if (altitude > 2700000) {
+    if(acceleration < 0)
+    currentState = DESCENT;
+  }
+}
+
+//descent stae
+void descent() {
+  if (altitude <= 400000) {
+    if (gyro = 0) {
+      waitingTime = waitingTime + startTime - endTime;
+      endTime = startTime - preTime;
+      if (waitingTime >= 420000) {
+        currentState = LANDING;
+      }
+    }
+  }
+}
+
+void landing() {
+  break;
 }
