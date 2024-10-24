@@ -281,6 +281,7 @@ void loop() {
   //Proportional term
   bno.getEvent(&event);
   angularvelocity = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
+  altitude = GPS.getAltitude() / 1000;
 
 
   if(angularvelocity.x() >= 10) {
