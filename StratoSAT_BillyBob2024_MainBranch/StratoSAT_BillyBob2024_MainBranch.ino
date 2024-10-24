@@ -314,7 +314,7 @@ void loop() {
 
   if(output >= 15) {
     digitalWrite(solenoidclock, HIGH);
-    digitalWrite(solenoidcounter, HIGH);
+    digitalWrite(solenoidcounter, LOW);
   }
   if(output <= -15) {
     digitalWrite(solenoidclock, LOW);
