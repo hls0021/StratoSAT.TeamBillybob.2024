@@ -211,7 +211,7 @@ void setup() {
   delay(10);
   bmp.readPressure();
   delay(10);
-  seaLevel = bmp.pressure / 100.0 + 193000;
+  seaLevel = bmp.pressure / 100.0;
 
   Serial5.begin(9600); 
   pinMode(led, OUTPUT);
