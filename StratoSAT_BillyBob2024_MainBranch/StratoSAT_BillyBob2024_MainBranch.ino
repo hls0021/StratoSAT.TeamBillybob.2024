@@ -83,6 +83,7 @@ imu::Vector<3> orientation;
 imu::Vector<3> acceleration;
 float steady;
 float packetcount;
+float seaLevel;
 //TODO angularVelocity and orientation need to be type vector
 // imu::Vector<3> orientation;
 
@@ -202,6 +203,12 @@ void setup() {
   //Start Time
   startTime = millis();
 
+  bmp.readPressure();
+  delay(10);
+  bmp.readPressure();
+  delay(10);
+  seaLevel = bmp.pressure / 100.0;
+
   Serial5.begin(9600); 
   pinMode(led, OUTPUT);
   Serial5.print("Team_ID,");
@@ -252,7 +259,7 @@ void loop() {
         return;
         }
         Serial5.print(bmp.readTemperature());
-        Serial5.print(bmp.readAltitude(630));  // Adjust sea level pressure need to fix
+        Serial5.print(bmp.readAltitude(seaLevel));  // Adjust sea level pressure need to fix
   // Collect and output GPS data 
   if (GPS.getLatitude() != 0 && GPS.getLongitude() != 0) {
         Serial5.print(GPS.getLatitude() / 10000000.0, 6);  // Latitude
@@ -281,7 +288,7 @@ void loop() {
   //Proportional term
   bno.getEvent(&event);
   angularvelocity = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
-  altitude = GPS.getAltitude() / 1000;
+  altitude = GPS.getAltitude(seaLevel) / 1000;
 
 
   if(angularvelocity.x() >= 10) {
