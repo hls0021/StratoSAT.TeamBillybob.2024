@@ -93,7 +93,7 @@ void loop() {
         Serial.print(bmp.readTemperature());
         Serial.println(" °C");
         Serial.print("BMP388 Altitude: ");
-        Serial.print(bmp.readAltitude(630));  // Adjust sea level pressure need to fix
+        Serial.print(bmp.readAltitude(seaLevel));  // Adjust sea level pressure need to fix
         Serial.println(" m");
   // Collect and output GPS data 
   if (GPS.getLatitude() != 0 && GPS.getLongitude() != 0) {
