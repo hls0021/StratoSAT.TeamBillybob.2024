@@ -18,6 +18,7 @@ unsigned long startTime;
 unsigned long currentTime; 
 int totalPackets = 1; 
 String teamID = "BillyBob";
+float seaLevel;
 void setup() {
   
   Serial.begin(9600);
