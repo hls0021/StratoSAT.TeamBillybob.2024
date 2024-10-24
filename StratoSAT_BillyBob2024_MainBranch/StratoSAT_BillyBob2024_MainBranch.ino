@@ -126,7 +126,7 @@ void stabilization() {
 
 //descent stae
 void descent() {
-  if (altitude <= previous40altitude + 15000) {
+  if (altitude <= previous40altitude + 15000 && altitude >= previous40altitude - 15000) {
     waitingTime = waitingTime + startTime - endTime;
     endTime = startTime - preTime;
     if (waitingTime >= 420000) {
