@@ -82,7 +82,7 @@ imu::Vector<3> angularvelocity;
 imu::Vector<3> orientation;
 imu::Vector<3> acceleration;
 float steady;
-float packetcount;
+float packetcount = 0;
 float seaLevel;
 //TODO angularVelocity and orientation need to be type vector
 // imu::Vector<3> orientation;
@@ -240,6 +240,7 @@ void loop() {
   startTime = millis();
   Serial5.print("BILLYBOB");
   Serial5.print(startTime);
+  packetcount = packetcount + 1;
   Serial5.print(packetcount);
   //collect and output absolute orientation by euler angle
   imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
