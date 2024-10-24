@@ -66,9 +66,9 @@ float previous39altitude;
 float previous40altitude;
 float gyro;
 float ledonoff = 0;
-float Kp;
-float Ki;
-float Kd;
+float Kp = 0;
+float Ki = 0;
+float Kd = 0;
 float integral;
 float derivative;
 float reference;
@@ -203,6 +203,10 @@ void setup() {
   //Start Time
   startTime = millis();
 
+  bmp.readPressure();
+  delay(10);
+  bmp.readPressure();
+  delay(10);
   bmp.readPressure();
   delay(10);
   bmp.readPressure();
