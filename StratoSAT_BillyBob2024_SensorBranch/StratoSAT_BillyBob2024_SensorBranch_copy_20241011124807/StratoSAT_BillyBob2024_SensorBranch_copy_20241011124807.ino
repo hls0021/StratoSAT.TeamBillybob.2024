@@ -50,6 +50,13 @@ void setup() {
         Serial.println("u-blox GNSS module initialization failed!");
         while (1);  // If GNSS doesn't initialize, stop the program
     }
+
+  bmp.readPressure();
+  delay(10);
+  bmp.readPressure();
+  delay(10);
+  seaLevel = bmp.pressure / 100.0;
+
     //Start Time
       startTime = millis();
 }
