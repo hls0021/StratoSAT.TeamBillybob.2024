@@ -55,6 +55,10 @@ void setup() {
   delay(10);
   bmp.readPressure();
   delay(10);
+  bmp.readPressure();
+  delay(10);
+  bmp.readPressure();
+  delay(10);
   seaLevel = bmp.pressure / 100.0;
 
     //Start Time
