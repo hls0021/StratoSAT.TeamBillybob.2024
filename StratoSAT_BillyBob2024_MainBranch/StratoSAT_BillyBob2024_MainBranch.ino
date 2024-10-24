@@ -244,19 +244,19 @@ void loop() {
   Serial5.print(packetcount);
   //collect and output absolute orientation by euler angle
   imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
-        Serial5.print("Heading: "); Serial5.print(euler.x());
-        Serial5.print(" Roll: "); Serial5.print(euler.y());
-        Serial5.print(" Pitch: "); Serial5.println(euler.z());
+      Serial5.print(euler.x());
+      Serial5.print(euler.y());
+      Serial5.println(euler.z());
   //collect and output angular velocity with the gyro
   imu::Vector<3> gyro = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
-        Serial5.print(gyro.x()); Serial5.print(", ");
-        Serial5.print(gyro.y()); Serial5.print(", ");
-        Serial5.print(gyro.z()); Serial5.println(" rad/s");
+        Serial5.print(gyro.x());
+        Serial5.print(gyro.y());
+        Serial5.print(gyro.z());
   // Collect and output acceleration
   imu::Vector<3> accel = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
-        Serial5.print(accel.x()); Serial5.print(", ");
-        Serial5.print(accel.y()); Serial5.print(", ");
-        Serial5.print(accel.z()); Serial5.println(" m/s^2");
+        Serial5.print(accel.x());
+        Serial5.print(accel.y());
+        Serial5.print(accel.z());
 
   //collect and output temperature 
   if (!bmp.performReading()) {
