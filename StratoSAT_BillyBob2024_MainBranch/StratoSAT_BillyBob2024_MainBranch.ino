@@ -125,7 +125,7 @@ void stabilization() {
 
   if(angularvelocity.x() >= 10) {
     digitalWrite(solenoidclock, LOW);
-    digitalWrite(solenoidcounter, HIH);
+    digitalWrite(solenoidcounter, HIGH);
   }
   if(angularvelocity.x() <= -10) {
     digitalWrite(solenoidclock, HIGH);
