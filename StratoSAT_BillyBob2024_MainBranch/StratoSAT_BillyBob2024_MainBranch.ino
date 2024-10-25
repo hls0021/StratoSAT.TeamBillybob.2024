@@ -124,12 +124,12 @@ void stabilization() {
 
 
   if(angularvelocity.x() >= 10) {
-    digitalWrite(solenoidclock, HIGH);
-    digitalWrite(solenoidcounter, LOW);
+    digitalWrite(solenoidclock, LOW);
+    digitalWrite(solenoidcounter, HIH);
   }
   if(angularvelocity.x() <= -10) {
-    digitalWrite(solenoidclock, LOW);
-    digitalWrite(solenoidcounter, HIGH);
+    digitalWrite(solenoidclock, HIGH);
+    digitalWrite(solenoidcounter, LOW);
   }
   if(angularvelocity.x() >= -10 && angularvelocity.x() <= 10) {
     digitalWrite(solenoidclock, LOW);
@@ -323,7 +323,6 @@ void loop() {
         }
        
    // Gather and output time spent and UTC time
-    Serial5.print();
     Serial5.print(GPS.getYear());
     Serial5.print("-");
     Serial5.print(GPS.getMonth());
