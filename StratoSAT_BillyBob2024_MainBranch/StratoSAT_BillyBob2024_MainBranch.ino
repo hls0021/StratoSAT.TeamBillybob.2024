@@ -117,6 +117,48 @@ void ascend() {
 
 //stabilization state
 void stabilization() {
+  //Proportional term
+  bno.getEvent(&event);
+  angularvelocity = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
+  altitude = GPS.getAltitude(seaLevel) / 1000;
+
+
+  if(angularvelocity.x() >= 10) {
+    digitalWrite(solenoidclock, HIGH);
+    digitalWrite(solenoidcounter, LOW);
+  }
+  if(angularvelocity.x() <= -10) {
+    digitalWrite(solenoidclock, LOW);
+    digitalWrite(solenoidcounter, HIGH);
+  }
+  if(angularvelocity.x() >= -10 && angularvelocity.x() <= 10) {
+    digitalWrite(solenoidclock, LOW);
+    digitalWrite(solenoidcounter, LOW);
+  }
+  error = reference - orientation.x();
+  //Integral and Derivative terms 
+  integral = integral + error * (50 - (millis() - startTime));
+  derivative = (error - lasterror) / (50 - (millis() - startTime));
+  //Output
+  output = (Kp * error) + (Ki * integral) + (Kd * derivative);
+  
+  lasterror = error;
+
+  if(output >= 15) {
+    digitalWrite(solenoidclock, HIGH);
+    digitalWrite(solenoidcounter, LOW);
+  }
+  if(output <= -15) {
+    digitalWrite(solenoidclock, LOW);
+    digitalWrite(solenoidcounter, HIGH);
+  }  
+  if(output >= 2) {
+    if(output <= 2) {
+      digitalWrite(solenoidclock, LOW);
+      digitalWrite(solenoidcounter, LOW);
+    }
+  }
+
   if (altitude > 2700000) {
     if(acceleration.x() < 0) {}
       currentState = DESCENT;
@@ -126,6 +168,8 @@ void stabilization() {
 
 //descent stae
 void descent() {
+  digitalWrite(solenoidclock, LOW);
+  digitalWrite(solenoidcounter, LOW);
   if (altitude <= previous40altitude + 15000 && altitude >= previous40altitude - 15000) {
     waitingTime = waitingTime + startTime - endTime;
     endTime = startTime - preTime;
@@ -292,47 +336,6 @@ void loop() {
     Serial5.print(":");
     Serial5.println(GPS.getSecond());
 
-  //Proportional term
-  bno.getEvent(&event);
-  angularvelocity = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
-  altitude = GPS.getAltitude(seaLevel) / 1000;
-
-
-  if(angularvelocity.x() >= 10) {
-    digitalWrite(solenoidclock, HIGH);
-    digitalWrite(solenoidcounter, LOW);
-  }
-  if(angularvelocity.x() <= -10) {
-    digitalWrite(solenoidclock, LOW);
-    digitalWrite(solenoidcounter, HIGH);
-  }
-  if(angularvelocity.x() >= -10 && angularvelocity.x() <= 10) {
-    digitalWrite(solenoidclock, LOW);
-    digitalWrite(solenoidcounter, LOW);
-  }
-  error = reference - orientation.x();
-  //Integral and Derivative terms 
-  integral = integral + error * (50 - (millis() - startTime));
-  derivative = (error - lasterror) / (50 - (millis() - startTime));
-  //Output
-  output = (Kp * error) + (Ki * integral) + (Kd * derivative);
-  
-  lasterror = error;
-
-  if(output >= 15) {
-    digitalWrite(solenoidclock, HIGH);
-    digitalWrite(solenoidcounter, LOW);
-  }
-  if(output <= -15) {
-    digitalWrite(solenoidclock, LOW);
-    digitalWrite(solenoidcounter, HIGH);
-  }  
-  if(output >= 2) {
-    if(output <= 2) {
-      digitalWrite(solenoidclock, LOW);
-      digitalWrite(solenoidcounter, LOW);
-    }
-  }
 
 
     //state transition
