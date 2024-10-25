@@ -304,38 +304,38 @@ void loop() {
 
 
   if(angularvelocity.x() >= 10 / 3.14159265358979 * 180) {
-    digitalWrite(solenoidclock, LOW);
-    digitalWrite(solenoidcounter, HIGH);
+    digitalWrite(solenoidclock, LOW); 
+    digitalWrite(solenoidcounter, HIGH); 
   }
   if(angularvelocity.x() <= -10 / 3.14159265358979 * 180) {
-    digitalWrite(solenoidclock, HIGH);
+    digitalWrite(solenoidclock, HIGH); 
     digitalWrite(solenoidcounter, LOW);
   }
   if(angularvelocity.x() >= -10 / 3.14159265358979 * 180 && angularvelocity.x() <= 10 / 3.14159265358979 * 180) {
-    digitalWrite(solenoidclock, LOW);
-    digitalWrite(solenoidcounter, LOW);
+    digitalWrite(solenoidclock, LOW); 
+    digitalWrite(solenoidcounter, LOW); 
   }
-  error = reference - orientation.x();
+  error = reference - orientation.x(); 
   //Integral and Derivative terms 
-  integral = integral + error * (50 - (millis() - startTime));
-  derivative = (error - lasterror) / (50 - (millis() - startTime));
+  integral = integral + error * (50 - (millis() - startTime)); 
+  derivative = (error - lasterror) / (50 - (millis() - startTime)); 
   //Output
-  output = (Kp * error) + (Ki * integral) + (Kd * derivative);
+  output = (Kp * error) + (Ki * integral) + (Kd * derivative); 
   
-  lasterror = error;
+  lasterror = error; 
 
   if(output >= 15) {
-    digitalWrite(solenoidclock, HIGH);
-    digitalWrite(solenoidcounter, LOW);
+    digitalWrite(solenoidclock, HIGH); 
+    digitalWrite(solenoidcounter, LOW); 
   }
   if(output <= -15) {
-    digitalWrite(solenoidclock, LOW);
-    digitalWrite(solenoidcounter, HIGH);
+    digitalWrite(solenoidclock, LOW); 
+    digitalWrite(solenoidcounter, HIGH); 
   }  
   if(output >= 2) {
     if(output <= 2) {
-      digitalWrite(solenoidclock, LOW);
-      digitalWrite(solenoidcounter, LOW);
+      digitalWrite(solenoidclock, LOW); 
+      digitalWrite(solenoidcounter, LOW); 
     }
   }
 
