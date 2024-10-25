@@ -323,7 +323,7 @@ void loop() {
         }
        
    // Gather and output time spent and UTC time
-       Serial5.println();
+    Serial5.print();
     Serial5.print(GPS.getYear());
     Serial5.print("-");
     Serial5.print(GPS.getMonth());
