@@ -19,7 +19,7 @@ unsigned long currentTime;
 int totalPackets = 1; 
 String teamID = "BillyBob";
 
-float tenloops;
+float tenloops = 0;
 float preTime;
 float endTime;
 float waitingTime;
@@ -117,47 +117,6 @@ void ascend() {
 
 //stabilization state
 void stabilization() {
-  //Proportional term
-  bno.getEvent(&event);
-  angularvelocity = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
-  altitude = GPS.getAltitude(seaLevel) / 1000;
-
-
-  if(angularvelocity.x() >= 10) {
-    digitalWrite(solenoidclock, LOW);
-    digitalWrite(solenoidcounter, HIGH);
-  }
-  if(angularvelocity.x() <= -10) {
-    digitalWrite(solenoidclock, HIGH);
-    digitalWrite(solenoidcounter, LOW);
-  }
-  if(angularvelocity.x() >= -10 && angularvelocity.x() <= 10) {
-    digitalWrite(solenoidclock, LOW);
-    digitalWrite(solenoidcounter, LOW);
-  }
-  error = reference - orientation.x();
-  //Integral and Derivative terms 
-  integral = integral + error * (50 - (millis() - startTime));
-  derivative = (error - lasterror) / (50 - (millis() - startTime));
-  //Output
-  output = (Kp * error) + (Ki * integral) + (Kd * derivative);
-  
-  lasterror = error;
-
-  if(output >= 15) {
-    digitalWrite(solenoidclock, HIGH);
-    digitalWrite(solenoidcounter, LOW);
-  }
-  if(output <= -15) {
-    digitalWrite(solenoidclock, LOW);
-    digitalWrite(solenoidcounter, HIGH);
-  }  
-  if(output >= 2) {
-    if(output <= 2) {
-      digitalWrite(solenoidclock, LOW);
-      digitalWrite(solenoidcounter, LOW);
-    }
-  }
 
   if (altitude > 2700000) {
     if(acceleration.x() < 0) {}
@@ -171,8 +130,8 @@ void descent() {
   digitalWrite(solenoidclock, LOW);
   digitalWrite(solenoidcounter, LOW);
   if (altitude <= previous40altitude + 15000 && altitude >= previous40altitude - 15000) {
-    waitingTime = waitingTime + startTime - endTime;
     endTime = startTime - preTime;
+    waitingTime = waitingTime + startTime - endTime;
     if (waitingTime >= 420000) {
         currentState = LANDING;
     }
@@ -201,7 +160,7 @@ void setup() {
     ledonoff = 1;
     }
     else {
-    if(ledonoff == 0) {
+    if(ledonoff == 1) {
       digitalWrite(led, LOW);
       tenloops = tenloops - 10;
       ledonoff = 0;
@@ -221,7 +180,7 @@ void setup() {
     ledonoff = 1;
     }
     else {
-    if(ledonoff == 0) {
+    if(ledonoff == 1) {
       digitalWrite(led, LOW);
       tenloops = tenloops - 10;
       ledonoff = 0;
@@ -236,6 +195,9 @@ void setup() {
   bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
   bmp.setOutputDataRate(BMP3_ODR_50_HZ);
   delay(1000);
+
+  GPS.setI2COutput(COM_TYPE_UBX);
+  GPS.setNavigationFrequency(5);
 
     //GPS
     if (GPS.begin()) {
@@ -335,21 +297,62 @@ void loop() {
     Serial5.print(":");
     Serial5.println(GPS.getSecond());
 
+  //Proportional term
+  bno.getEvent(&event);
+  angularvelocity = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
+  altitude = GPS.getAltitude(seaLevel) / 1000;
+
+
+  if(angularvelocity.x() >= 10 / 3.14159265358979 * 180) {
+    digitalWrite(solenoidclock, LOW);
+    digitalWrite(solenoidcounter, HIGH);
+  }
+  if(angularvelocity.x() <= -10 / 3.14159265358979 * 180) {
+    digitalWrite(solenoidclock, HIGH);
+    digitalWrite(solenoidcounter, LOW);
+  }
+  if(angularvelocity.x() >= -10 / 3.14159265358979 * 180 && angularvelocity.x() <= 10 / 3.14159265358979 * 180) {
+    digitalWrite(solenoidclock, LOW);
+    digitalWrite(solenoidcounter, LOW);
+  }
+  error = reference - orientation.x();
+  //Integral and Derivative terms 
+  integral = integral + error * (50 - (millis() - startTime));
+  derivative = (error - lasterror) / (50 - (millis() - startTime));
+  //Output
+  output = (Kp * error) + (Ki * integral) + (Kd * derivative);
+  
+  lasterror = error;
+
+  if(output >= 15) {
+    digitalWrite(solenoidclock, HIGH);
+    digitalWrite(solenoidcounter, LOW);
+  }
+  if(output <= -15) {
+    digitalWrite(solenoidclock, LOW);
+    digitalWrite(solenoidcounter, HIGH);
+  }  
+  if(output >= 2) {
+    if(output <= 2) {
+      digitalWrite(solenoidclock, LOW);
+      digitalWrite(solenoidcounter, LOW);
+    }
+  }
 
 
     //state transition
   tenloops = tenloops + 1;
   if (tenloops >= 10) {
     if(ledonoff == 0) {
-    digitalWrite(led, HIGH);
-    tenloops = tenloops - 10;
-    ledonoff = 1;
+      digitalWrite(led, HIGH);
+      tenloops = 0;
+      ledonoff = 1;
     }
     else {
-    if(ledonoff == 0) {
-      digitalWrite(led, LOW);
-      tenloops = tenloops - 10;
-      ledonoff = 0;
+      if(ledonoff == 1) {
+        digitalWrite(led, LOW);
+        tenloops = 0;
+        ledonoff = 0;
       }
     }
   }
