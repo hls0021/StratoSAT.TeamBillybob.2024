@@ -66,9 +66,9 @@ float previous39altitude;
 float previous40altitude;
 float gyro;
 float ledonoff = 0;
-float Kp = 0;
-float Ki = 0;
-float Kd = 0;
+float Kp = 2;
+float Ki = 0.3;
+float Kd = 0.2;
 float integral;
 float derivative;
 float reference;
@@ -200,6 +200,8 @@ void setup() {
         Serial5.println("u-blox GNSS module initialization failed!");
         while (1);  // If GNSS doesn't initialize, stop the program
     }
+
+
   //Start Time
   startTime = millis();
 
@@ -303,6 +305,10 @@ void loop() {
   if(angularvelocity.x() <= -10) {
     digitalWrite(solenoidclock, LOW);
     digitalWrite(solenoidcounter, HIGH);
+  }
+  if(angularvelocity.x() >= -10 && angularvelocity.x() <= 10) {
+    digitalWrite(solenoidclock, LOW);
+    digitalWrite(solenoidcounter, LOW);
   }
   error = reference - orientation.x();
   //Integral and Derivative terms 
